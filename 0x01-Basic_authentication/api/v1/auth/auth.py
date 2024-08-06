@@ -7,8 +7,10 @@ Route module for the API
 import os
 from os import getenv
 from typing import Tuple
+
 from flask import Flask, abort, jsonify, request
 from flask_cors import CORS, cross_origin
+
 from api.v1.auth.auth import Auth
 from api.v1.auth.basic_auth import BasicAuth
 from api.v1.views import app_views
@@ -16,18 +18,11 @@ from api.v1.views import app_views
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
-# Create a variable auth initialized to None after the CORS definition
+
 auth = None
 
-
-# Update api/v1/app.py for using BasicAuth class instead of Auth depending
-# on the value of the environment variable AUTH_TYPE, If AUTH_TYPE is equal
-# to basic_auth:
-#   import BasicAuth from api.v1.auth.basic_auth
-#   create an instance of BasicAuth and assign it to the variable auth
-# Otherwise, keep the previous mechanism with auth an instance of Auth.
-auth_type_getter = getenv('AUTH_TYPE', 'default')
-if auth_type_getter == "basic_auth":
+auth_type = getenv('AUTH_TYPE', 'default')
+if auth_type == "basic_auth":
     auth = BasicAuth()
 else:
     auth = Auth()
@@ -73,26 +68,23 @@ def handle_request():
     """
     Handle the request by checking for authentication and authorization.
     """
-    # If auth is None, do nothing
+    
     if auth is None:
         return
-    # Create list of excluded paths
+    
     excluded_paths = ['/api/v1/status/',
                       '/api/v1/unauthorized/',
                       '/api/v1/forbidden/']
-    # if request.path is not part of the list above, do nothing
-    # You must use the method require_auth from the auth instance
+    
     if not auth.require_auth(request.path, excluded_paths):
         return
-    # If auth.authorization_header(request) returns None, raise the error
-    # 401 - you must use abort
-    auth_toper = auth.authorization_header(request)
-    if auth_toper is None:
+    
+    auth_header = auth.authorization_header(request)
+    if auth_header is None:
         abort(401)
-    # If auth.current_user
-    # must use abort
-    user_get = auth.current_user(request)
-    if user_get is None:
+
+    user = auth.current_user(request)
+    if user is None:
         abort(403)
 
 
