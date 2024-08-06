@@ -28,16 +28,11 @@ class BasicAuth(Auth):
             str: The Base64 part of the Authorization header, or None if the
             header is invalid.
         """
-        # Return None if authorization_header is None or if
-        # authorization_header is not a string
         if authorization_header is None or not \
                 isinstance(authorization_header, str):
             return None
-        # Return None if authorization_header doesn’t start by Basic (with a
-        # space at the end)
         if not authorization_header.startswith("Basic "):
             return None
-        # Otherwise, return the value after Basic (after the space)
         return authorization_header.split("Basic ")[1].strip()
 
     def decode_base64_authorization_header(
