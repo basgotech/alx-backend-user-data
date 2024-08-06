@@ -40,16 +40,6 @@ class BasicAuth(Auth):
         # Otherwise, return the value after Basic (after the space)
         return authorization_header.split("Basic ")[1].strip()
 
-        # ALTERNATIVE SOLUTION
-        # ===========================================================================
-        # if authorization_header is None or not \
-        # isinstance(authorization_header, str):
-        #     return None
-        # parts = authorization_header.split(" ")
-        # if len(parts) != 2 or parts[0] != "Basic":
-        #     return None
-        # return parts[1]
-
     def decode_base64_authorization_header(
             self, base64_authorization_header: str) -> str:
         """Decodes the Base64 string `base64_authorization_header` and
