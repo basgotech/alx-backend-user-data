@@ -75,24 +75,16 @@ def handle_request():
     """
     Handle the request by checking for authentication and authorization.
     """
-    # If auth is None, do nothing
     if auth is None:
         return
-    # Create list of excluded paths
     excluded_paths = ['/api/v1/status/',
                       '/api/v1/unauthorized/',
                       '/api/v1/forbidden/']
-    # if request.path is not part of the list above, do nothing
-    # You must use the method require_auth from the auth instance
     if not auth.require_auth(request.path, excluded_paths):
         return
-    # If auth.authorization_header(request) returns None, raise the error
-    # 401 - you must use abort
     auth_header = auth.authorization_header(request)
     if auth_header is None:
         abort(401)
-    # If auth.current_user(request) returns None, raise the error 403 - you
-    # must use abort
     user = auth.current_user(request)
     if user is None:
         abort(403)
