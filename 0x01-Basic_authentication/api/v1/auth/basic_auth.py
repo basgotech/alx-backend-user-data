@@ -62,21 +62,15 @@ class BasicAuth(Auth):
         Returns:
             str: The decoded value as a UTF8 string.
         """
-        # Return None if base64_authorization_header is None
         if base64_authorization_header is None:
             return None
-        # Return None if base64_authorization_header is not a string
         if not isinstance(base64_authorization_header, str):
             return None
-        # Return None if base64_authorization_header is not a valid Base64
-        # Attempt to decode the base64 string & return None if an error occurs
         try:
             decoded = base64.b64decode(
                 base64_authorization_header,
                 validate=True
             )
-            # Return the decoded value as UTF8 string
-            # you can use decode('utf-8')
             return decoded.decode('utf-8')
         except (binascii.Error, UnicodeDecodeError):
             return None
@@ -90,16 +84,12 @@ class BasicAuth(Auth):
         Returns:
             Tuple[str, str]: Tuple containing the user email and password.
         """
-        # Return None, None if decoded_header is None or
-        # not a string
         if decoded_header is None or not isinstance(decoded_header, str):
             return None, None
-        # Attempt to split email and password by first ':'
         try:
             email, password = decoded_header.split(':', 1)
         except ValueError:
             return None, None
-        # Return the user email and the user password
         return email, password
 
     def user_object_from_credentials(
