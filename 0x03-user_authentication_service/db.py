@@ -49,27 +49,27 @@ class DB:
         return add_user
 
     def find_user_by(self, **kwargs) -> User:
-        """ Find user by a given attribute
+        """ Find user with given key
             Args:
-                - Dictionary of attributes to use as search
+                - Attributes to use as search
                   parameters
             Return:
                 - User object
         """
 
-        attrs, vals = [], []
-        for attr, val in kwargs.items():
-            if not hasattr(User, attr):
+        attr_val, keys = [], []
+        for att, key in kwargs.items():
+            if not hasattr(User, att):
                 raise InvalidRequestError()
-            attrs.append(getattr(User, attr))
-            vals.append(val)
+            attr_val.append(getattr(User, att))
+            keys.append(key)
 
-        session = self._session
-        query = session.query(User)
-        user = query.filter(tuple_(*attrs).in_([tuple(vals)])).first()
-        if not user:
+        sess_db = self._session
+        query = sess_db.query(User)
+        user_find = query.filter(tuple_(*attr_val).in_([tuple(keys)])).first()
+        if not user_find:
             raise NoResultFound()
-        return user
+        return user_find
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """ Searches for user instance using given id parameter
