@@ -52,10 +52,6 @@ class Auth:
 
     def create_session(self, email: str) -> str:
         """ Creates session for user
-            Args:
-                - email: user's email
-            Return:
-                - created session_id
         """
         db = self._db
         try:
@@ -68,10 +64,6 @@ class Auth:
 
     def get_user_from_session_id(self, session_id: str) -> User:
         """ Gets user based on their session id
-            Args:
-                - session_id: user's session_id
-            Return:
-                - User if found else None
         """
         if not session_id:
             return None
@@ -90,10 +82,6 @@ class Auth:
 
     def get_reset_password_token(self, email: str) -> str:
         """ Generates reset password token for valid user
-            Args:
-                - email: user's email
-            Return:
-                - reset password token
         """
         db = self._db
         try:
@@ -106,11 +94,6 @@ class Auth:
 
     def update_password(self, reset_token: str, password: str) -> None:
         """ Update password for user with matching reset token
-            Args:
-                - reset_toke: user's reset token
-                - password: new password
-            Return:
-                - None
         """
         db = self._db
         try:
@@ -123,10 +106,6 @@ class Auth:
 
 def _hash_password(password: str) -> bytes:
     """ Creates password hash
-        Args:
-            - password: user password
-        Return:
-            - hashed password
     """
     e_pwd = password.encode()
     return bcrypt.hashpw(e_pwd, bcrypt.gensalt())
@@ -134,7 +113,5 @@ def _hash_password(password: str) -> bytes:
 
 def _generate_uuid() -> str:
     """ Generates unique ids
-        Return:
-            - UUID generated
     """
     return str(uuid4())
