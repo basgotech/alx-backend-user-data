@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Users model
+Creating Users model
 """
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
@@ -9,7 +9,7 @@ Base = declarative_base()
 
 
 class User(Base):
-    """ Represents user object/table
+    """ Attribute of users
     """
     __tablename__ = 'users'
 
