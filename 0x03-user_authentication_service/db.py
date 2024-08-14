@@ -72,16 +72,16 @@ class DB:
         return user_find
 
     def update_user(self, user_id: int, **kwargs) -> None:
-        """ Searches for user instance using given id parameter
+        """ Searches for user with given key
             Args:
-                - user_id: user's id
+                - user_id: users id
             Return:
-                - User instance found
+                - User found
         """
-        user = self.find_user_by(id=user_id)
-        session = self._session
-        for attr, val in kwargs.items():
-            if not hasattr(User, attr):
+        user_data = self.find_user_by(id=user_id)
+        session_hold = self._session
+        for attr_id, key in kwargs.items():
+            if not hasattr(User, attr_id):
                 raise ValueError
-            setattr(user, attr, val)
-        session.commit()
+            setattr(user_data, attr_id, key)
+        session_hold.commit()
