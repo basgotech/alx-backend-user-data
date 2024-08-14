@@ -43,28 +43,28 @@ class Auth:
         """
         db = self._db
         try:
-            user_login = db.find_user_by(email=email)
+            user = db.find_user_by(email=email)
         except NoResultFound:
             return False
-        if not bcrypt.checkpw(password.encode('utf-8'), user_login.hashed_password):
+        if not bcrypt.checkpw(password.encode('utf-8'), user.hashed_password):
             return False
         return True
 
     def create_session(self, email: str) -> str:
-        """ Creates session for user to save attr
+        """ Creates session for user
             Args:
-                - email: users email
+                - email: user's email
             Return:
-                - created session_val
+                - created session_id
         """
         db = self._db
         try:
             user = db.find_user_by(email=email)
         except NoResultFound:
             return None
-        session_val = _generate_uuid()
-        db.update_user(user.id, session_val=session_val)
-        return session_val
+        session_id = _generate_uuid()
+        db.update_user(user.id, session_id=session_id)
+        return session_id
 
     def get_user_from_session_id(self, session_id: str) -> User:
         """ Gets user based on their session id
